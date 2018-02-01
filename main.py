@@ -1,11 +1,6 @@
-
-
 import chess
+import IA.MinMax as mm
 
 board = chess.Board()
 
-
-for i in board.legal_moves:
-    print(i)
-
-
+print(mm.bestPlay(board, 3))

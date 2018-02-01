@@ -15,41 +15,77 @@ fin fonction
 '''
 
 import chess
-
-player = True
-
-def evalPiece(piece:chess.Piece):
+import math
 
 
-def evaluerJeu(board : chess.Board):
-    pieces = board.pieces(player)
+def evaluer_jeu(board: chess.Board):
     score = 0
-    def f(x): return {
-        1:1,
-        2:3.2,
-        3:3.33,
-        4:5.1,
-        5:8.8
-    }.get(x)
-    for p in pieces:
-        score += f(p.type)
+    score = board.pieces(1, board.turn).__len__() * 1
+    score = board.pieces(2, board.turn).__len__() * 3
+    score = board.pieces(3, board.turn).__len__() * 3
+    score = board.pieces(4, board.turn).__len__() * 5
+    score = board.pieces(5, board.turn).__len__() * 9
+    score = board.legal_moves.count() * 0.5
+
+    return score
 
 
-def min(board:chess.Board, profondeur):
+def min(board: chess.Board, profondeur):
     if profondeur == 0 or board.is_game_over():
-        return
+        return evaluer_jeu(board)
+
+    min_val = math.inf
+
+    for play in board.legal_moves:
+        board_clone = board.copy()
+        board_clone.push_uci(play.uci())
+        val = max(board_clone, profondeur - 1)
+
+        if val < min_val:
+            min_val = val
+
+        del board_clone  # on efface le board cloné
+
+    return min_val
 
 
-def bestPlay(board: chess.Board, player):
+def max(board: chess.Board, profondeur):
+    if profondeur == 0 or board.is_game_over():
+        return evaluer_jeu(board)
+
+    max_val = -math.inf
+
+    for play in board.legal_moves:
+        board_clone = board.copy()
+        board_clone.push_uci(play.uci())
+        val = max(board_clone, profondeur - 1)
+
+        if val > max_val:
+            max_val = val
+
+        del board_clone  # on efface le board cloné
+
+    return max_val
+
+
+def bestPlay(board: chess.Board, profondeur=5):
     """
     :param board: chess.Board
     :param player:
     :return:
     """
-    boardWork = board.copy()
-    max = 999999
+    val_max = -math.inf
+    best_play = None
     for move in board.legal_moves:
-        boardWork.push(move)
+        board_clone = board.copy()
+        #print(move.uci())
+        board_clone.push_uci(move.uci())
+        val = min(board_clone, profondeur)
 
+        if val > val_max:
+            val_max = val
+            best_play = move
 
+        del board_clone
 
+    return best_play
