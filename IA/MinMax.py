@@ -1,19 +1,3 @@
-'''
-fonction jouer : void
-     max_val <- -infini
-     Pour tous les coups possibles
-          simuler(coup_actuel)
-          val <- Min(etat_du_jeu, profondeur)
-          si val > max_val alors
-               max_val <- val
-               meilleur_coup <- coup_actuel
-          fin si
-          annuler_coup(coup_actuel)
-     fin pour
-     jouer(meilleur_coup)
-fin fonction
-'''
-
 import chess
 import math
 
@@ -31,12 +15,17 @@ def evaluer_jeu(board: chess.Board):
 
 
 def min(board: chess.Board, profondeur):
+    """
+    :param profondeur: profondeur de l'algorithme
+    :type board: chess.Board
+    """
     if profondeur == 0 or board.is_game_over():
         return evaluer_jeu(board)
 
     min_val = math.inf
 
     for play in board.legal_moves:
+        #board.push_uci(play.uci)
         board_clone = board.copy()
         board_clone.push_uci(play.uci())
         val = max(board_clone, profondeur - 1)
@@ -44,26 +33,34 @@ def min(board: chess.Board, profondeur):
         if val < min_val:
             min_val = val
 
-        del board_clone  # on efface le board cloné
+        #board.pop()
 
     return min_val
 
 
 def max(board: chess.Board, profondeur):
+    """
+    :param board: le tableau du jeu
+    :type board: chess.Board
+    :param profondeur: profondeur de l'algo
+    :type profondeur: int
+    """
     if profondeur == 0 or board.is_game_over():
         return evaluer_jeu(board)
 
     max_val = -math.inf
 
     for play in board.legal_moves:
+        #board.push_uci(play.uci)
         board_clone = board.copy()
         board_clone.push_uci(play.uci())
-        val = max(board_clone, profondeur - 1)
+        val = min(board_clone, profondeur - 1)
 
         if val > max_val:
             max_val = val
 
-        del board_clone  # on efface le board cloné
+        #del board_clone  # on efface le board cloné
+        #board.pop()
 
     return max_val
 

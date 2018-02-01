@@ -15,7 +15,7 @@ while not board.is_checkmate():
     #(move, dontknow) = engine.go()
     #board.push_uci(move.__str__())
     #engine.position(board.fen())
-    board.push_uci(mm.bestPlay(board, 2).uci())
+    board.push_uci(mm.bestPlay(board, 1).uci())
     #engine.position(board.fen())
     print(board)
 
