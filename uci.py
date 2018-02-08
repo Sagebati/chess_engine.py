@@ -1,12 +1,9 @@
 
 debug=False
 
-
-
-
-def gui_to_engine(command:str):
+def gui_to_engine(command):
     if command == "uci":
-
+        return False
     if command == "debug on":
         debug = True
 
@@ -17,5 +14,6 @@ def gui_to_engine(command:str):
         print("readyok")
 
 
-
+# TODO azdaz
 def engine_to_gui():
+    return False

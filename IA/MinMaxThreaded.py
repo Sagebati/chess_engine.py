@@ -1,29 +1,18 @@
+from threading import Thread
+
 import chess
+import math
 
 
 def evaluer_jeu(board):
     score = 0
     score += board.pieces(1, board.turn).__len__() * 1
-    score += board.pieces(2, board.turn).__len__() * 3.2
-    score += board.pieces(3, board.turn).__len__() * 3.3
-    score += board.pieces(4, board.turn).__len__() * 5.1
-    score += board.pieces(5, board.turn).__len__() * 8.8
-    #score += board.legal_moves.count() * 0.5
+    score += board.pieces(2, board.turn).__len__() * 3
+    score += board.pieces(3, board.turn).__len__() * 3
+    score += board.pieces(4, board.turn).__len__() * 5
+    score += board.pieces(5, board.turn).__len__() * 9
+    score += board.legal_moves.count() * 0.5
     score += 10 if board.is_checkmate() else 0
-    for coups in board.legal_moves:
-        type = board.piece_type_at(coups.from_square)
-        if type == 1:
-            score += 0.1
-        if type == 2:
-            score += 0.2
-        if type == 3:
-            score += 0.3
-        if type == 4:
-            score += 0.4
-        if type == 5:
-            score += 0.5
-        if type == 6:
-            score += 0.2
 
     return score
 
@@ -42,11 +31,14 @@ def min(board, profondeur):
 
     for play in board.legal_moves:
         board.push_uci(play.uci())
+        # board_clone = board.copy()
+        # board_clone.push_uci(play.uci())
         val = max(board, profondeur - 1)
-        board.pop()
+
         if val < min_val:
             min_val = val
 
+        board.pop()
 
     return min_val
 
@@ -62,13 +54,17 @@ def max(board, profondeur):
         return evaluer_jeu(board)
 
     max_val = -999999999
-
+    vals = []
     for play in board.legal_moves:
         board.push_uci(play.uci())
+
         val = min(board, profondeur - 1)
-        board.pop()
+
         if val > max_val:
             max_val = val
+
+        # del board_clone  # on efface le board cloné
+        board.pop()
 
     return max_val
 
@@ -80,16 +76,28 @@ def best_play(board, profondeur=5):
     :param player:
     :return:
     """
-    val_min = 999999999
+    val_max = -999999999
     best_move = None
     for move in board.legal_moves:
         board.push_uci(move.uci())
-        val = max(board, profondeur)
-        board.pop()
-        if val < val_min:
-            val_min = val
+        # board_clone = board.copy()
+        # board_clone.push_uci(move.uci())
+        val = min(board, profondeur)
+        if val > val_max:
+            val_max = val
             best_move = move
 
         # del board_clone
+        board.pop()
     return best_move
+
+class ThreadMethod(Thread):
+    def __init__(self, tabRes,fonction):
+        Thread.__init__(self)
+        self.tabRes = tabRes
+        self.f = fonction
+
+    def run(self):
+        
+
 
