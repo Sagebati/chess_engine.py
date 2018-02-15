@@ -8,7 +8,7 @@ def evaluer_jeu(board):
     score += board.pieces(3, board.turn).__len__() * 3.3
     score += board.pieces(4, board.turn).__len__() * 5.1
     score += board.pieces(5, board.turn).__len__() * 8.8
-    #score += board.legal_moves.count() * 0.5
+    # score += board.legal_moves.count() * 0.5
     score += 10 if board.is_checkmate() else 0
     for coups in board.legal_moves:
         type = board.piece_type_at(coups.from_square)
@@ -22,8 +22,8 @@ def evaluer_jeu(board):
             score += 0.4
         if type == 5:
             score += 0.5
-        if type == 6:
-            score += 0.2
+        #if type == 6:
+           # score += 0.2
 
     return score
 
@@ -46,7 +46,6 @@ def min(board, profondeur):
         board.pop()
         if val < min_val:
             min_val = val
-
 
     return min_val
 
@@ -81,7 +80,13 @@ def best_play(board, profondeur=5):
     :return:
     """
     val_min = 999999999
-    best_move = None
+    nbr_pieces = get_pieces(board)
+
+    if get_pieces(board) < 10:
+        profondeur += 1
+    elif nbr_pieces < 5:
+        profondeur += int((10 - nbr_pieces)/2)
+
     for move in board.legal_moves:
         board.push_uci(move.uci())
         val = max(board, profondeur)
@@ -93,3 +98,15 @@ def best_play(board, profondeur=5):
         # del board_clone
     return best_move
 
+
+def get_pieces(board):
+    """
+
+    :param board: chess.Board
+    :return: nombre de pieces
+    """
+    tmp = 0
+    for i in range(1, 6):
+        tmp += len(board.pieces(i, board.turn))
+        tmp += len(board.pieces(i, not board.turn))
+    return tmp
