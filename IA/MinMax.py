@@ -8,9 +8,8 @@ def evaluer_jeu(board):
     score += board.pieces(3, board.turn).__len__() * 3.3
     score += board.pieces(4, board.turn).__len__() * 5.1
     score += board.pieces(5, board.turn).__len__() * 8.8
-    #score += board.legal_moves.count() * 0.5
-    score += 10 if board.is_checkmate() else 0
-    for coups in board.legal_moves:
+    score += board.legal_moves.count() * 0.5
+    """for coups in board.legal_moves:
         type = board.piece_type_at(coups.from_square)
         if type == 1:
             score += 0.1
@@ -24,7 +23,7 @@ def evaluer_jeu(board):
             score += 0.5
         if type == 6:
             score += 0.2
-
+    """
     return score
 
 
