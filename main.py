@@ -1,16 +1,20 @@
 import chess
-import IA.MinMax as Mm
-import os
+import IA.min_max as mm
+import IA.alpha_beta as ab
+import IA.evaluation as ev
+
 board = chess.Board()
 
 count = 0
+profondeur = 4
 while not board.is_checkmate():
     # (move, dontknow) = engine.go()
     # board.push_uci(move.__str__())
     # engine.position(board.fen())
-    board.push_uci(Mm.best_play(board,2).uci())
-    count += 1
     # engine.position(board.fen())
-    print(board)
     print("---------------------------------")
-    print(count)
+    print("nbrcoups", count, "score:", ev.evaluer(board), "profondeur:",profondeur)
+    print("---------------------------------")
+    print(board)
+    board.push(ab.best_play(board, board.turn, profondeur))
+    count += 1
