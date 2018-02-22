@@ -1,8 +1,10 @@
+from multiprocessing.pool import Pool
+
 import chess
 import math
 
 import IA.evaluation as ev
-import threading
+import multiprocessing as mp
 
 
 def _min(board, profondeur):
@@ -43,40 +45,29 @@ def _max(board, profondeur):
     return val
 
 
-def best_play(board, player, profondeur=5):
+def best_play(board: chess.Board, player, profondeur=5):
     """
     :param profondeur: profondeur de l'algorithme
     :param board: chess.Board
     :param player: boolean
     :return: chess.Move
     """
-    val_min = -math.inf
-    val_max = math.inf
-    best_move = None
+    results = []
+    id = 0
+    moves = []
+    pool = mp.Pool(processes=16)
     for move in board.legal_moves:
+        moves.append(move)
+        clone = board.copy(stack=False)
+        clone.push(move)
         if player:
-            board.push(move)
-            val = _min(board, profondeur)
-            board.pop()
-            if val > val_min:
-                val_min = val
-                best_move = move
+            results.append((pool.apply(_min, args=(clone, profondeur)), id))
         else:
-            board.push(move)
-            val = _max(board, profondeur)
-            board.pop()
-            if val < val_max:
-                val_max = val
-                best_move = move
-    return best_move
+            results.append((pool.apply(_max, args=(clone, profondeur)), id))
+        id += 1
+    if player:
+        m = max(results)
+    else:
+        m = min(results)
 
-
-
-class minimax(threading.Thread):
-    def __init__(self,tab_res, id):
-        self.tab_res = tab_res
-        self.id = id
-
-    def run(self, func):
-        tab_res[i] = func(board)
-
+    return moves[m[1]]

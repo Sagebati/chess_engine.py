@@ -1,12 +1,12 @@
 import chess
-import IA.min_max as ab
+import IA.min_max_threaded as ab
 import IA.evaluation as ev
 
 board = chess.Board()
 print(board)
 
 count = 0
-profondeur = 4
+profondeur = 3
 
 
 def motif_fin(board: chess.Board):
