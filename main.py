@@ -1,12 +1,12 @@
 import chess
-import IA.min_max_threaded as ab
+import IA.alpha_beta as ab
 import IA.evaluation as ev
 
 board = chess.Board()
 print(board)
 
 count = 0
-profondeur = 3
+profondeur = 2
 
 
 def motif_fin(board: chess.Board):
@@ -23,14 +23,10 @@ def motif_fin(board: chess.Board):
 
 
 while not board.is_game_over():
-    # (move, dontknow) = engine.go()
-    # board.push_uci(move.__str__())
-    # engine.position(board.fen())
-    # engine.position(board.fen())
+    board.push(ab.best_play(board, board.turn, profondeur))
     print("---------------------------------")
     print("nbrcoups", count, "score:", ev.evaluer(board), "profondeur:", profondeur)
     print("---------------------------------")
-    board.push(ab.best_play(board, board.turn, profondeur - 1))
     print(board)
     count += 1
 

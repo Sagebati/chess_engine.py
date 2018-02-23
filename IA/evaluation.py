@@ -26,12 +26,12 @@ def fin_de_jeu(board: chess.Board, player):
                 if player:
                     bonus_malus -= sc/2
                 else:
-                    bonus_malus += sc/4
+                    bonus_malus -= sc/4
             else: # sc < 0
                 if player:
                     bonus_malus += sc/4
                 else:
-                    bonus_malus -= sc/2
+                    bonus_malus += sc/2
     return bonus_malus
 
 
@@ -60,8 +60,8 @@ def _score(board):
     score = 0
     score -= materiel_noir(board)
     score += materiel_blanc(board)
-    score += mobilite(board, True) * 0.3
-    score -= mobilite(board, False) * 0.3
+    score += mobilite(board, True) * 0.2
+    score -= mobilite(board, False) * 0.2
     return score
 
 
