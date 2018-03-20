@@ -1,4 +1,5 @@
 import chess
+import math
 
 
 def materiel_noir(board):
@@ -11,15 +12,15 @@ def materiel_noir(board):
     return score
 
 
-def fin_de_jeu(board: chess.Board, player):
+def fin_de_jeu(board: chess.Board):
     bonus_malus = 0
     if board.is_game_over():
         result = board.result()
         if board.is_checkmate():
             if result == "1-0":
-                bonus_malus += 50
+                bonus_malus += math.inf
             if result == "0-1":
-                bonus_malus += -50
+                bonus_malus += -math.inf
         if result == "1/2-1/2":
             sc = _score(board)
             if sc > 0:
@@ -62,5 +63,9 @@ def _score(board):
 def evaluer(board):
     score = 0
     score += _score(board)
-    score += fin_de_jeu(board, board.turn)
+    score += fin_de_jeu(board)
     return score
+
+
+def evaluer_coup(move:chess.Move):
+    move.to_square

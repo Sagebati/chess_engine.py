@@ -6,7 +6,7 @@ board = chess.Board()
 print(board)
 
 count = 0
-profondeur = 2
+profondeur = 3
 
 
 def motif_fin(board: chess.Board):

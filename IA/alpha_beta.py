@@ -48,7 +48,7 @@ def best_play(board, player, profondeur=5):
             board.push(coup)
             val_min = ab_max(board, -math.inf, math.inf, profondeur - 1)
             board.pop()
-            if val_max > val_min:
+            if val_min < val_max:
                 val_max = val_min
                 mv = coup
     return mv
