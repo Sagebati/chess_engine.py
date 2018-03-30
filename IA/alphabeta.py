@@ -12,6 +12,7 @@ def alphabeta(board, profondeur):
         val = max(val, _min(board, profondeur - 1, alpha, beta))
         board.pop()
 
+
         if alpha >= val:
             return val
         beta = min(beta, val)
