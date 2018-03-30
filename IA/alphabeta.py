@@ -42,3 +42,22 @@ def _min(board, profondeur, alpha, beta):
         if alpha <= val:
             return val
         alpha = max(beta, val)
+
+
+def best_Interval():
+    
+    inter = 0.5
+
+    if (math.abs(tmp[0][0] - tmp[1][0]) >= inter):
+        
+        if tmp[0][0] > tmp[1][0]:
+            return tmp[0][1]
+        else:
+            return tmp[1][1]
+    else:
+        return tmp[randint(0,1)][1]
+        
+
+
+
+
