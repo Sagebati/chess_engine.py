@@ -1,3 +1,4 @@
+import chess
 
 debug=False
 
@@ -12,6 +13,10 @@ def gui_to_engine(command):
 
     if command == "isready":
         print("readyok")
+    if command == "ucinewgame":
+        return chess.Board()
+    if command == "position":
+
 
 
 # TODO azdaz
