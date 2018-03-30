@@ -11,6 +11,7 @@ def alphabeta(board, profondeur):
         board.push_uci(coup.uci())
         val = max(val, _min(board, profondeur - 1, alpha, beta))
         board.pop()
+
         if alpha >= val:
             return val
         beta = min(beta, val)
