@@ -2,6 +2,7 @@ import math
 import random
 
 import chess
+import chess.polyglot as zb
 import collections
 
 import IA.evaluation as ev
@@ -37,29 +38,40 @@ def ab_min(board: chess.Board, alpha, beta, profondeur):
 
 def best_play(board, player, profondeur=5):
     mv = None
-    # doing a deque of fixed length (2nd param)
+    tt = {}
+    # doing a dequeu of fixed lenght (2nd param)
     best_moves = collections.deque(2 * [(0, 0)], 2)
     if player:
         val_min = -math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            val_max = ab_min(board, -math.inf, math.inf, profondeur - 1)
+            hash = zb.zobrist_hash(board)
+            if hash in tt.keys():
+                mv = tt[hash]
+            else:
+                val_max = ab_min(board, -math.inf, math.inf, profondeur - 1)
+                if val_max > val_min:
+                    val_min = val_max
+                    mv = coup
+                    best_moves.appendleft((coup, val_max))
+                    tt[zb.zobrist_hash(board)] = mv
             board.pop()
-            if val_max > val_min:
-                val_min = val_max
-                mv = coup
-                best_moves.appendleft((coup, val_max))
     else:
         val_max = math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            val_min = ab_max(board, -math.inf, math.inf, profondeur - 1)
+            hash = zb.zobrist_hash(board)
+            if hash in tt.keys():
+                mv = tt[hash]
+            else:
+                val_min = ab_max(board, -math.inf, math.inf, profondeur - 1)
+                if val_min < val_max:
+                    val_max = val_min
+                    mv = coup
+                    best_moves.appendleft((coup, val_min))
+                    tt[zb.zobrist_hash(board)] = mv
             board.pop()
-            if val_min < val_max:
-                val_max = val_min
-                mv = coup
-                best_moves.appendleft((coup, val_min))
-    return creative_move(best_moves)
+    return mv
 
 
 def creative_move(fifo: collections.deque):

@@ -1,5 +1,6 @@
-import chess
 import math
+
+import chess
 
 import IA.evaluation as ev
 
@@ -63,7 +64,7 @@ def best_play(board, player, profondeur=5):
             if val > val_min:
                 val_min = val
                 best_move = move
-                tmp.apped((val, best_move))
+                tmp.append((val, best_move))
         else:
             board.push(move)
             val = _max(board, profondeur)
@@ -71,25 +72,19 @@ def best_play(board, player, profondeur=5):
             if val < val_max:
                 val_max = val
                 best_move = move
-                tmp.apped((val, best_move))
-
+                tmp.append((val, best_move))
 
     return best_Interval(tmp)
 
 
-
 def best_Interval():
-    
     interval = 0.5
 
     if (math.abs(tmp[0][0] - tmp[1][0]) >= interval):
-        
+
         if tmp[0][0] > tmp[1][0]:
             return tmp[0][1]
         else:
             return tmp[1][1]
     else:
-        return tmp[randint(0,1)][1]
-        
-
-
+        return tmp[randint(0, 1)][1]

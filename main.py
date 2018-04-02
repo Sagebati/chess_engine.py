@@ -1,12 +1,13 @@
 import chess
-import IA.alpha_beta as ab
+
+import IA.alpha_beta_trans as ab
 import IA.evaluation as ev
 
 board = chess.Board()
 print(board)
 
-count = 0
-profondeur = 3
+count = 1
+profondeur = 4
 
 
 def motif_fin(board: chess.Board):

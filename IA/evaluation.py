@@ -1,5 +1,6 @@
-import chess
 import math
+
+import chess
 
 
 def materiel_noir(board):
@@ -25,16 +26,16 @@ def fin_de_jeu(board: chess.Board):
             sc = _score(board)
             if sc > 0:
                 bonus_malus -= 10
-            else: # sc < 0
+            else:  # sc < 0
                 bonus_malus += 10
     return bonus_malus
 
 
 def mobilite(board: chess.Board, player):
-    turn_actuel = board.turn
-    if player == turn_actuel:
+    tour_actuel = board.turn
+    if player == tour_actuel:
         return board.legal_moves.count()
-    if player != turn_actuel:
+    if player != tour_actuel:
         board.push(chess.Move.null())
         nbrMoves = board.legal_moves.count()
         board.pop()
@@ -67,5 +68,6 @@ def evaluer(board):
     return score
 
 
-def evaluer_coup(move:chess.Move):
-    move.to_square
+def evaluer_coup(board: chess.Board, move: chess.Move):
+    # not implemented
+    return None
