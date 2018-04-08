@@ -2,7 +2,7 @@ import chess
 
 
 class HashItem:
-    def __init__(self, zobrist: int, depth: int, flag: int, evaluation: int, ancient: int, best_move: chess.Move):
+    def __init__(self, zobrist: int, depth: int,  evaluation: int,  best_move: chess.Move):
         """
         :param zobrist: the zobrist hash
         :param depth: depth of the search 0 if leaf 1 if before last
@@ -13,7 +13,5 @@ class HashItem:
         """
         self.zobrist = zobrist
         self.depth = depth
-        self.flag = flag
         self.evaluation = evaluation
-        self.ancient = ancient
         self.best_move = best_move

@@ -4,17 +4,20 @@ import random
 import chess
 import chess.polyglot as zb
 import collections
+import util.HashItem
 
 import IA.evaluation as ev
 
 
-def ab_max(board: chess.Board, alpha, beta, profondeur):
+def ab_max(board: chess.Board, alpha, beta, profondeur, tt: {}):
     if profondeur == 0 or board.is_game_over():
+        hash = zb.zobrist_hash(board)
+        tt[zb.zobrist_hash(board)] = util.HashItem(hash, )
         return ev.evaluer(board)
     val = -math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        val = max(val, ab_min(board, alpha, beta, profondeur - 1))
+        val = max(val, ab_min(board, alpha, beta, profondeur - 1, tt))
         board.pop()
         if val >= beta:
             return val
@@ -22,13 +25,13 @@ def ab_max(board: chess.Board, alpha, beta, profondeur):
     return val
 
 
-def ab_min(board: chess.Board, alpha, beta, profondeur):
+def ab_min(board: chess.Board, alpha, beta, profondeur, tt: {}):
     if profondeur == 0 or board.is_game_over():
         return ev.evaluer(board)
     val = math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        val = min(val, ab_max(board, alpha, beta, profondeur - 1))
+        val = min(val, ab_max(board, alpha, beta, profondeur - 1, tt))
         board.pop()
         if val <= alpha:
             return val
@@ -49,7 +52,7 @@ def best_play(board, player, profondeur=5):
             if hash in tt.keys():
                 mv = tt[hash]
             else:
-                val_max = ab_min(board, -math.inf, math.inf, profondeur - 1)
+                val_max = ab_min(board, -math.inf, math.inf, profondeur - 1, tt)
                 if val_max > val_min:
                     val_min = val_max
                     mv = coup
@@ -64,7 +67,7 @@ def best_play(board, player, profondeur=5):
             if hash in tt.keys():
                 mv = tt[hash]
             else:
-                val_min = ab_max(board, -math.inf, math.inf, profondeur - 1)
+                val_min = ab_max(board, -math.inf, math.inf, profondeur - 1, tt)
                 if val_min < val_max:
                     val_max = val_min
                     mv = coup
