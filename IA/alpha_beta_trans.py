@@ -1,19 +1,19 @@
 import math
-import random
 
 import chess
 import chess.polyglot as zb
 import collections
-import util.HashItem
 
 import IA.evaluation as ev
+import util.HashItem
 
 
 def ab_max(board: chess.Board, alpha, beta, profondeur, tt: {}):
     if profondeur == 0 or board.is_game_over():
         hash = zb.zobrist_hash(board)
-        tt[zb.zobrist_hash(board)] = util.HashItem(hash, )
-        return ev.evaluer(board)
+        note = ev.evaluer(board)
+        tt[zb.zobrist_hash(board)] = util.HashItem(hash, profondeur, note)
+        return note
     val = -math.inf
     for coup in board.legal_moves:
         board.push(coup)
@@ -27,7 +27,10 @@ def ab_max(board: chess.Board, alpha, beta, profondeur, tt: {}):
 
 def ab_min(board: chess.Board, alpha, beta, profondeur, tt: {}):
     if profondeur == 0 or board.is_game_over():
-        return ev.evaluer(board)
+        hash = zb.zobrist_hash(board)
+        note = ev.evaluer(board)
+        tt[zb.zobrist_hash(board)] = util.HashItem(hash, profondeur, note)
+        return note
     val = math.inf
     for coup in board.legal_moves:
         board.push(coup)
@@ -48,40 +51,29 @@ def best_play(board, player, profondeur=5):
         val_min = -math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            hash = zb.zobrist_hash(board)
-            if hash in tt.keys():
-                mv = tt[hash]
+            zob_hash = zb.zobrist_hash(board)
+            if zob_hash in tt.keys():
+                mv = tt[zob_hash]
             else:
                 val_max = ab_min(board, -math.inf, math.inf, profondeur - 1, tt)
                 if val_max > val_min:
                     val_min = val_max
                     mv = coup
                     best_moves.appendleft((coup, val_max))
-                    tt[zb.zobrist_hash(board)] = mv
             board.pop()
     else:
         val_max = math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            hash = zb.zobrist_hash(board)
-            if hash in tt.keys():
-                mv = tt[hash]
+            zob_hash = zb.zobrist_hash(board)
+            if zob_hash in tt.keys():
+                mv = tt[zob_hash]
             else:
                 val_min = ab_max(board, -math.inf, math.inf, profondeur - 1, tt)
                 if val_min < val_max:
                     val_max = val_min
                     mv = coup
                     best_moves.appendleft((coup, val_min))
-                    tt[zb.zobrist_hash(board)] = mv
             board.pop()
     return mv
 
-
-def creative_move(fifo: collections.deque):
-    epsilon = 0.5
-    best_eval = fifo[0][1]
-
-    # Creating a list with move with 0.5 difference with the best move
-    coup_possibles = [coupeval for coupeval in fifo if best_eval - epsilon <= coupeval[1] <= best_eval + epsilon]
-
-    return random.choice(coup_possibles)[0]

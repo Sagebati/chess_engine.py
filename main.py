@@ -1,13 +1,7 @@
 import chess
 
-import IA.alpha_beta_trans as ab
+import IA.alpha_beta as ab
 import IA.evaluation as ev
-
-board = chess.Board()
-print(board)
-
-count = 1
-profondeur = 4
 
 
 def motif_fin(board: chess.Board):
@@ -21,6 +15,20 @@ def motif_fin(board: chess.Board):
     if board.is_checkmate():
         print("Echec est mat")
     print("resultat:", board.result())
+
+
+board = chess.Board()
+print(board)
+
+count = 1
+profondeur = 4
+
+# print("2 Games modes: 1: IA vs IA ; 2: IA vs You")
+# resp1 = input("Which mode ?")
+# resp2 = input("Which difficulty for IA 1 ?")
+# resp3 = ""
+# if int(resp1) == 1:
+#     resp3 = input("Which difficulty for IA 2 ?")
 
 
 while not board.is_game_over():

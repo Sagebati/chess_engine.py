@@ -1,8 +1,10 @@
 import math
 
 import chess
+import collections
 
 import IA.evaluation as ev
+from util.funcs import creative_move
 
 
 def _min(board, profondeur):
@@ -51,11 +53,10 @@ def best_play(board, player, profondeur=5):
     :return: chess.Move
     """
 
-    tmp = [2]
+    best_moves = collections.deque(2 * [(0, 0)], 2)
 
     val_min = -math.inf
     val_max = math.inf
-    best_move = None
     for move in board.legal_moves:
         if player:
             board.push(move)
@@ -63,28 +64,13 @@ def best_play(board, player, profondeur=5):
             board.pop()
             if val > val_min:
                 val_min = val
-                best_move = move
-                tmp.append((val, best_move))
+                best_moves.appendleft((move, val))
         else:
             board.push(move)
             val = _max(board, profondeur)
             board.pop()
             if val < val_max:
                 val_max = val
-                best_move = move
-                tmp.append((val, best_move))
+                best_moves.appendleft((move, val))
 
-    return best_Interval(tmp)
-
-
-def best_Interval():
-    interval = 0.5
-
-    if (math.abs(tmp[0][0] - tmp[1][0]) >= interval):
-
-        if tmp[0][0] > tmp[1][0]:
-            return tmp[0][1]
-        else:
-            return tmp[1][1]
-    else:
-        return tmp[randint(0, 1)][1]
+    return creative_move(best_moves)
