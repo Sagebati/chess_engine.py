@@ -13,5 +13,7 @@ class HashItem:
         """
         self.zobrist = zobrist
         self.depth = depth
+        #self.flag
         self.evaluation = evaluation
         self.best_move = best_move
+        #self.ancient
