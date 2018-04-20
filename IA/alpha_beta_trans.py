@@ -8,11 +8,11 @@ import IA.evaluation as ev
 import util.HashItem
 
 
-def ab_max(board: chess.Board, alpha, beta, profondeur, tt: {}):
+def ab_max(board: chess.Board, alpha: int, beta: int, profondeur: int, tt: {}):
     if profondeur == 0 or board.is_game_over():
         hash = zb.zobrist_hash(board)
         note = ev.evaluer(board)
-        tt[zb.zobrist_hash(board)] = util.HashItem(hash, profondeur, note)
+        tt[hash] = util.HashItem(hash, profondeur, note, (alpha, beta))
         return note
     val = -math.inf
     for coup in board.legal_moves:
@@ -25,15 +25,18 @@ def ab_max(board: chess.Board, alpha, beta, profondeur, tt: {}):
     return val
 
 
-def ab_min(board: chess.Board, alpha, beta, profondeur, tt: {}):
+def ab_min(board: chess.Board, alpha: int, beta: int, profondeur: int, tt: {}):
     if profondeur == 0 or board.is_game_over():
         hash = zb.zobrist_hash(board)
         note = ev.evaluer(board)
-        tt[zb.zobrist_hash(board)] = util.HashItem(hash, profondeur, note)
+        tt[hash] = util.HashItem(hash, profondeur, note, (alpha, beta))
         return note
     val = math.inf
     for coup in board.legal_moves:
         board.push(coup)
+        zb_hash = zb.zobrist_hash(board)
+        if zb_hash in tt.keys():
+            alpha, beta = tt[zb_hash].alphabeta
         val = min(val, ab_max(board, alpha, beta, profondeur - 1, tt))
         board.pop()
         if val <= alpha:
@@ -76,4 +79,3 @@ def best_play(board, player, profondeur=5):
                     best_moves.appendleft((coup, val_min))
             board.pop()
     return mv
-
