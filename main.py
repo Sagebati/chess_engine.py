@@ -1,6 +1,6 @@
 import chess
 
-import IA.alpha_beta as ab
+import IA.alpha_beta_trans as ab
 import IA.evaluation as ev
 
 

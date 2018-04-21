@@ -35,7 +35,7 @@ def ab_min(board: chess.Board, alpha, beta, profondeur):
     return val
 
 
-def best_play(board, player, profondeur=5):
+def best_play(board, player, profondeur=5) -> chess.Move:
     # doing a deque of fixed length (2nd param)
     best_moves = collections.deque(2 * [(0, 0)], 2)
     if player:
