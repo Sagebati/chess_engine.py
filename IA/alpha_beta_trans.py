@@ -6,7 +6,7 @@ import collections
 
 import IA.evaluation as ev
 
-from util.HashItem import HashItem
+from util.tt import HashItem
 
 
 def ab_max(board: chess.Board, alpha: int, beta: int, profondeur: int, tt: {}):

@@ -2,7 +2,12 @@ import IA.alpha_beta as ia
 import chess
 
 
-def go(board: chess.Board, time, profondeur=3):
+def go(board: chess.Board, args: []):
+    profondeur = 3
+    if len(args) > 1:
+        for i in range(len(args)):
+            if args[i] == "depth":
+                profondeur = int(args[i+1])
     best_move: chess.Move = ia.best_play(board, board.turn, profondeur)
     print("bestmove ", best_move.uci())
 

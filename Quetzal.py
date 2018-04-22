@@ -4,7 +4,6 @@ import sys
 import chess
 import uci.eng_gui as eg
 import uci.gui_eng as ge
-import IA.alpha_beta as IA
 
 
 def split_comm_args(inp: str):
@@ -38,6 +37,6 @@ while 1:
     if command == "position":
         ge.position(board, args)
     if command == "go":
-        ge.go(board, 0)
+        ge.go(board, args)
     if command == "quit":
         sys.exit(0)

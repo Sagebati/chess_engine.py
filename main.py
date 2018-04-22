@@ -1,6 +1,6 @@
 import chess
 
-import IA.alpha_beta_trans as ab
+import IA.alpha_beta as ab
 import IA.evaluation as ev
 
 
@@ -21,7 +21,7 @@ board = chess.Board()
 print(board)
 
 count = 1
-profondeur = 4
+profondeur = 3
 
 # print("2 Games modes: 1: IA vs IA ; 2: IA vs You")
 # resp1 = input("Which mode ?")

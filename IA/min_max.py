@@ -62,14 +62,14 @@ def best_play(board, player, profondeur=5):
             board.push(move)
             val = _min(board, profondeur)
             board.pop()
-            if val > val_min:
+            if val >= val_min:
                 val_min = val
                 best_moves.appendleft((move, val))
         else:
             board.push(move)
             val = _max(board, profondeur)
             board.pop()
-            if val < val_max:
+            if val <= val_max:
                 val_max = val
                 best_moves.appendleft((move, val))
 

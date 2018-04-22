@@ -35,7 +35,7 @@ def ab_min(board: chess.Board, alpha, beta, profondeur):
     return val
 
 
-def best_play(board, player, profondeur=5) -> chess.Move:
+def best_play(board: chess.Board, player: bool, profondeur: int = 5) -> chess.Move:
     # doing a deque of fixed length (2nd param)
     best_moves = collections.deque(2 * [(0, 0)], 2)
     if player:
@@ -57,4 +57,3 @@ def best_play(board, player, profondeur=5) -> chess.Move:
                 val_max = val_min
                 best_moves.appendleft((coup, val_min))
     return creative_move(best_moves)
-

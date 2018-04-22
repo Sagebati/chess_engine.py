@@ -19,9 +19,9 @@ def fin_de_jeu(board: chess.Board):
         result = board.result()
         if board.is_checkmate():
             if result == "1-0":
-                bonus_malus += math.inf
+                bonus_malus += 99999
             if result == "0-1":
-                bonus_malus += -math.inf
+                bonus_malus += - 99999
         if result == "1/2-1/2":
             sc = _score(board)
             if sc > 0:
@@ -69,5 +69,20 @@ def evaluer(board):
 
 
 def evaluer_coup(board: chess.Board, move: chess.Move):
-    # not implemented
+    board.at
     return None
+
+
+def sortMoves(board:chess.Board,moves: [chess.Move]):
+    squaresQ = board.pieces(5,not board.turn)
+    squaresT = board.pieces(4,not board.turn)
+    squaresC = board.pieces(3,not board.turn)
+    squaresF = board.pieces(2,not board.turn)
+    squaresP = board.pieces(1,not board.turn)
+    squaresR = board.pieces(6,not board.turn)
+
+    moves_notes = []
+    for m in moves:
+        if m.to_square == squaresQ:
+            moves_notes.append()
+

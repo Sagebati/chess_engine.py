@@ -1,3 +1,14 @@
+import chess
+import chess.polyglot as zb
+
+
+def findBoardorAdd(board: chess.Board, tt: {}, depth, alphabeta, ev=None):
+    h = zb.zobrist_hash(board)
+    if h in tt.keys():
+        return True, tt[h]
+    else:
+        tt[h] = HashItem(h, depth, ev, alphabeta)
+        return False, None
 
 
 class HashItem:
