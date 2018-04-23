@@ -1,25 +1,15 @@
-import math
-
 import chess
 
+from IA.psq import *
 
-def materiel_noir(board: chess.Board):
+
+def materiel(board: chess.Board, color):
     score = 0
-    score += board.pieces(1, False).__len__() * 1
-    score += board.pieces(2, False).__len__() * 3.2
-    score += board.pieces(3, False).__len__() * 3.3
-    score += board.pieces(4, False).__len__() * 5.1
-    score += board.pieces(5, False).__len__() * 8.8
-    return score
-
-
-def materiel_blanc(board: chess.Board):
-    score = 0
-    score += board.pieces(1, True).__len__() * 1
-    score += board.pieces(2, True).__len__() * 3.2
-    score += board.pieces(3, True).__len__() * 3.3
-    score += board.pieces(4, True).__len__() * 5.1
-    score += board.pieces(5, True).__len__() * 8.8
+    score += board.pieces(chess.PAWN, color).__len__() * 100
+    score += board.pieces(chess.KNIGHT, color).__len__() * 320
+    score += board.pieces(chess.BISHOP, color).__len__() * 330
+    score += board.pieces(chess.ROOK, color).__len__() * 510
+    score += board.pieces(chess.QUEEN, color).__len__() * 880
     return score
 
 
@@ -33,7 +23,7 @@ def fin_de_jeu(board: chess.Board):
             if result == "0-1":
                 bonus_malus -= 99999
         if result == "1/2-1/2":
-            sc = _score(board)
+            sc = materiel_mob(board)
             if sc > 0:
                 bonus_malus -= 2
             else:  # sc < 0
@@ -41,30 +31,58 @@ def fin_de_jeu(board: chess.Board):
     return bonus_malus
 
 
-def mobilite(board: chess.Board, player):
+def mobilite(board: chess.Board, color):
     tour_actuel = board.turn
-    if player == tour_actuel:
+    if color == tour_actuel:
         return board.legal_moves.count()
-    if player != tour_actuel:
+    if color != tour_actuel:
         board.push(chess.Move.null())
         nbr_moves = board.legal_moves.count()
         board.pop()
         return nbr_moves
 
 
-def _score(board):
+def materiel_mob(board):
     score = 0
-    score -= materiel_noir(board)
-    score += materiel_blanc(board)
-    score -= mobilite(board, False) * 0.1
-    score += mobilite(board, True) * 0.1
+    score -= materiel(board, False)
+    score += materiel(board, True)
+    score -= mobilite(board, False) * 20
+    score += mobilite(board, True) * 20
+    return score
+
+
+def psq_tables(board: chess.Board):
+    score = 0
+    pawns_w = board.pieces(chess.PAWN, chess.WHITE)
+    pawns_b = board.pieces(chess.PAWN, chess.BLACK)
+    for i in pawns_w:
+        score += psq_tables_w[chess.PAWN][i]
+    for i in pawns_b:
+        score -= psq_tables_b[chess.PAWN][i]
+
+    knights_w = board.pieces(chess.KNIGHT, chess.WHITE)
+    knights_b = board.pieces(chess.KNIGHT, chess.BLACK)
+    for i in knights_w:
+        score += psq_tables_w[chess.KNIGHT][i]
+    for i in knights_b:
+        score -= psq_tables_b[chess.KNIGHT][i]
+    return score
+
+
+def castling(board: chess.Board, color: bool) -> int:
+    score = 0
+    score += 40 if board.has_kingside_castling_rights(color) else 0
+    score += 40 if board.has_queenside_castling_rights(color) else 0
     return score
 
 
 def evaluer(board):
     score = 0
-    score += _score(board)
+    score += materiel_mob(board)
+    score += castling(board, True)
+    score -= castling(board, True)
     score += fin_de_jeu(board)
+    score += psq_tables(board)
     return score
 
 

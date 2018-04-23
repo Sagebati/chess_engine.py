@@ -21,7 +21,7 @@ board = chess.Board()
 print(board)
 
 count = 1
-profondeur = 6
+profondeur = 5
 
 # print("2 Games modes: 1: IA vs IA ; 2: IA vs You")
 # resp1 = input("Which mode ?")
