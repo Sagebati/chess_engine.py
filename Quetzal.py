@@ -19,8 +19,8 @@ author = "Samuel Batissou, Bejamin Cohen"
 
 debug = False
 board = chess.Board()
-
 while 1:
+
     inp = input()
     command, args = split_comm_args(inp)
 

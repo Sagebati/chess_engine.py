@@ -4,56 +4,73 @@ import chess
 import collections
 
 import IA.evaluation as ev
+
 from util.funcs import creative_move
 
 
 def ab_max(board: chess.Board, alpha, beta, profondeur):
+    """
+    :param board: the board of the game
+    :param alpha: alpha val
+    :param beta: beta val
+    :param profondeur: profondeur
+    :return: the evaluatuin of the branch
+    """
     if profondeur == 0 or board.is_game_over():
         return ev.evaluer(board)
-    val = -math.inf
+    best_eval = -math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        val = max(val, ab_min(board, alpha, beta, profondeur - 1))
+        best_eval = max(best_eval, ab_min(board, alpha, beta, profondeur - 1))
         board.pop()
-        if val >= beta:
-            return val
-        alpha = max(alpha, val)
-    return val
+        if best_eval >= beta:
+            return best_eval
+        alpha = max(alpha, best_eval)
+    return best_eval
 
 
-def ab_min(board: chess.Board, alpha, beta, profondeur):
+def ab_min(board: chess.Board, alpha, beta, profondeur: int):
+    """
+    :param board: board of the chess game
+    :param alpha: alpha
+    :param beta: beta
+    :param profondeur: profondeur
+    :return: the branch evaluation
+    """
     if profondeur == 0 or board.is_game_over():
         return ev.evaluer(board)
-    val = math.inf
+    best_eval = math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        val = min(val, ab_max(board, alpha, beta, profondeur - 1))
+        best_eval = min(best_eval, ab_max(board, alpha, beta, profondeur - 1))
         board.pop()
-        if val <= alpha:
-            return val
-        beta = min(beta, val)
-    return val
+        if best_eval <= alpha:
+            return best_eval
+        beta = min(beta, best_eval)
+    return best_eval
 
 
 def best_play(board: chess.Board, player: bool, profondeur: int = 5) -> chess.Move:
-    # doing a deque of fixed length (2nd param)
     best_moves = collections.deque(2 * [(0, 0)], 2)
-    if player:
-        val_min = -math.inf
+    alpha, beta = -math.inf, math.inf
+    if player:  # Max
+        best_eval = -math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            val_max = ab_min(board, -math.inf, math.inf, profondeur - 1)
+            ab = ab_min(board, alpha, beta, profondeur - 1)
             board.pop()
-            if val_max > val_min:
-                val_min = val_max
-                best_moves.appendleft((coup, val_max))
-    else:
-        val_max = math.inf
+            if ab > best_eval:
+                best_eval = ab
+                best_moves.appendleft((coup, ab))
+            alpha = max(alpha, ab)
+    else:  # Min Joueur Noir
+        best_eval = math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            val_min = ab_max(board, -math.inf, math.inf, profondeur - 1)
+            ab = ab_max(board, alpha, beta, profondeur - 1)
             board.pop()
-            if val_min < val_max:
-                val_max = val_min
-                best_moves.appendleft((coup, val_min))
+            if ab < best_eval:
+                best_eval = ab
+                best_moves.appendleft((coup, ab))
+            beta = min(ab, beta)
     return creative_move(best_moves)

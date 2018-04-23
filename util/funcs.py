@@ -9,7 +9,7 @@ def creative_move(fifo: collections.deque):
     :param fifo:
     :return:
     """
-    epsilon = 0.4
+    epsilon = 0.3
     best_eval = fifo[0][1]
 
     # Creating a list with move with 0.5 difference with the best move

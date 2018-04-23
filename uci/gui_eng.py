@@ -3,12 +3,12 @@ import chess
 
 
 def go(board: chess.Board, args: []):
-    profondeur = 3
+    profondeur = 4
     if len(args) > 1:
         for i in range(len(args)):
             if args[i] == "depth":
-                profondeur = int(args[i+1])
-    best_move: chess.Move = ia.best_play(board, board.turn, profondeur)
+                profondeur = int(args[i + 1])
+    best_move:chess.Move = ia.best_play(board, board.turn, profondeur)
     print("bestmove ", best_move.uci())
 
 
