@@ -21,14 +21,7 @@ board = chess.Board()
 print(board)
 
 count = 1
-profondeur = 6
-
-# print("2 Games modes: 1: IA vs IA ; 2: IA vs You")
-# resp1 = input("Which mode ?")
-# resp2 = input("Which difficulty for IA 1 ?")
-# resp3 = ""
-# if int(resp1) == 1:
-#     resp3 = input("Which difficulty for IA 2 ?")
+profondeur = 4
 
 while not board.is_game_over():
     board.push(ab.best_play(board, board.turn, profondeur))
