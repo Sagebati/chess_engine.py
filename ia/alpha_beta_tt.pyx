@@ -25,10 +25,11 @@ def ab_max(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}) -> int
     for coup in board.legal_moves:
         board.push(coup)
         h = zb.zobrist_hash(board)
-        if h in tt.keys():
-            it: HashItem = tt[h]
+        if h in tt:
+            it = tt[h]
             if it.depth <= depth:
                 ab = tt[h].evaluation
+                print("1")
             else:
                 ab = ab_min(board, alpha, beta, depth - 1, tt)
         else:
@@ -59,10 +60,11 @@ def ab_min(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}) -> int
     for coup in board.legal_moves:
         board.push(coup)
         h = zb.zobrist_hash(board)
-        if h in tt.keys():
-            it: HashItem = tt[h]
+        if h in tt:
+            it = tt[h]
             if it.depth <= depth:
                 ab = tt[h].evaluation
+                print("1")
             else:
                 ab = ab_max(board, alpha, beta, depth - 1, tt)
         else:
@@ -94,8 +96,9 @@ def best_play(board: chess.Board, player: bool, depth: int = 5) -> chess.Move:
         for coup in board.legal_moves:
             board.push(coup)
             h = zb.zobrist_hash(board)
-            if h in tt.keys():
+            if h in tt:
                 ab = tt[h].evaluation
+                print("1")
             else:
                 ab = ab_min(board, alpha, beta, depth - 1, tt)
             if ab > best_val:
@@ -103,12 +106,13 @@ def best_play(board: chess.Board, player: bool, depth: int = 5) -> chess.Move:
                 best_moves.appendleft((coup, ab))
             alpha = max(alpha, ab)
             board.pop()
+            print(len(tt))
     else:  # Min Noir
         best_val = math.inf
         for coup in board.legal_moves:
             board.push(coup)
             h = zb.zobrist_hash(board)
-            if h in tt.keys():
+            if h in tt:
                 ab = tt[h].evaluation
             else:
                 ab = ab_max(board, alpha, beta, depth - 1, tt)

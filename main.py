@@ -7,7 +7,7 @@ from util.funcs import game_over_reason
 board = chess.Board()
 
 count = 0
-depth = 4
+depth = 5
 
 while not board.is_game_over():
     print("---------------------------------")

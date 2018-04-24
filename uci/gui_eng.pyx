@@ -1,6 +1,8 @@
 import ia.alpha_beta_tt as ia
 from util.funcs import *
 
+import chess
+
 
 def go(board: chess.Board, args: []):
     profondeur = 4

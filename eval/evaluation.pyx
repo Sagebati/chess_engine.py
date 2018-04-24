@@ -54,7 +54,7 @@ def mobility(board: chess.Board, color):
 def psq_tables(board: chess.Board, is_endgame: bool = False) -> int:
     """
     Function that returns the heuristic of the board in adequately with the
-    psq tables in psq.py
+    psq tables in psq.pyx
     TODO: Better understanding and use this tables only when needed
     :param board: the board needed to calculate the
     :param is_endgame: True is the game is about to finish

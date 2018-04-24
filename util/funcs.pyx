@@ -51,7 +51,7 @@ def game_over_reason(board: chess.Board):
     Function that will print the result and the reason of the endgame
     :param board: board to analyse
     """
-    print("Game over:", end="")
+    print("Game over:", "")
     if board.is_fivefold_repetition():
         print("fivefold repetition")
     if board.is_seventyfive_moves():
