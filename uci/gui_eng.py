@@ -1,6 +1,4 @@
-import chess
-
-import IA.alpha_beta_trans as ia
+import ia.alpha_beta_tt as ia
 from util.funcs import *
 
 

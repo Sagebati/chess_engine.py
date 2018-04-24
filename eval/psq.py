@@ -1,8 +1,8 @@
 import chess
 
-psq_tables_w = {}
-psq_tables_b = {}
+# White
 
+psq_tables_w = {}
 psq_tables_w[chess.PAWN] = [
     0, 0, 0, 0, 0, 0, 0, 0,
     50, 50, 50, 50, 50, 50, 50, 50,
@@ -25,9 +25,10 @@ psq_tables_w[chess.KNIGHT] = [
     -50, -40, -30, -30, -30, -30, -40, -50
 ]
 
-## Black
+# Black
 
 
+psq_tables_b = {}
 psq_tables_b[chess.PAWN] = [
     0, 0, 0, 0, 0, 0, 0, 0,
     5, 10, 10, -20, -20, 10,

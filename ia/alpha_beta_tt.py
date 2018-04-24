@@ -4,14 +4,23 @@ import chess
 import chess.polyglot as zb
 import collections
 
-import IA.evaluation as ev
+import eval.evaluation as ev
 import util.funcs
 from util.tt import HashItem
 
 
-def ab_max(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}):
+def ab_max(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}) -> int:
+    """
+    Max node of the alpha/beta tree it call ab_min until depth == 0
+    :param board: the board
+    :param alpha: alpha
+    :param beta: beta
+    :param depth:
+    :param tt: transposition tables
+    :return: the evaluation
+    """
     if depth == 0 or board.is_game_over():
-        return ev.evaluer(board)
+        return ev.evaluate(board)
     best_eval = -math.inf
     for coup in board.legal_moves:
         board.push(coup)
@@ -34,9 +43,18 @@ def ab_max(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}):
     return best_eval
 
 
-def ab_min(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}):
+def ab_min(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}) -> int:
+    """
+    Min node of an alpha/beta tree, it calls ab_max until depth == 0
+    :param board: the chess board
+    :param alpha: alpha
+    :param beta: beta
+    :param depth: depth
+    :param tt: transpositions tables
+    :return: evaluation
+    """
     if depth == 0 or board.is_game_over():
-        return ev.evaluer(board)
+        return ev.evaluate(board)
     best_eval = math.inf
     for coup in board.legal_moves:
         board.push(coup)
@@ -59,7 +77,15 @@ def ab_min(board: chess.Board, alpha: int, beta: int, depth: int, tt: {}):
     return best_eval
 
 
-def best_play(board: chess.Board, player: bool, depth: int = 5):
+def best_play(board: chess.Board, player: bool, depth: int = 5) -> chess.Move:
+    """
+    Finds the best play for a board, it does a Max for white on the beginning and a Min
+    for black
+    :param board: the board to analyse
+    :param player: the player who plays
+    :param depth: the depth of wanted
+    :return: the best move
+    """
     tt = {}
     best_moves = collections.deque(2 * [(0, 0)], 2)
     alpha, beta = -math.inf, math.inf

@@ -1,7 +1,7 @@
 import chess
 
-import IA.alpha_beta_trans as ab
-import IA.evaluation as ev
+import eval.evaluation as ev
+import ia.min_max as ab
 
 
 def motif_fin(board: chess.Board):
@@ -21,19 +21,19 @@ board = chess.Board()
 print(board)
 
 count = 1
-profondeur = 5
+profondeur = 2
 
-# print("2 Games modes: 1: IA vs IA ; 2: IA vs You")
+# print("2 Games modes: 1: ia vs ia ; 2: ia vs You")
 # resp1 = input("Which mode ?")
-# resp2 = input("Which difficulty for IA 1 ?")
+# resp2 = input("Which difficulty for ia 1 ?")
 # resp3 = ""
 # if int(resp1) == 1:
-#     resp3 = input("Which difficulty for IA 2 ?")
+#     resp3 = input("Which difficulty for ia 2 ?")
 
 while not board.is_game_over():
     board.push(ab.best_play(board, board.turn, profondeur))
     print("---------------------------------")
-    print("nbrcoups", count, "score:", ev.evaluer(board), "profondeur:", profondeur)
+    print("nbrcoups", count, "score:", ev.evaluate(board), "profondeur:", profondeur)
     print("---------------------------------")
     print(board)
     count += 1
