@@ -12,6 +12,12 @@ def material(board: chess.Board, color):
 
 
 def game_over(board: chess.Board):
+    """
+    Function that return bonuses or maluses.
+    if the player if winning the
+    :param board: chess.Board
+    :return: the score
+    """
     bonus_malus = 0
     if board.is_game_over():
         result = board.result()
@@ -23,13 +29,19 @@ def game_over(board: chess.Board):
         if result == "1/2-1/2":
             sc = materiel_mob(board)
             if sc > 0:
-                bonus_malus -= 2
+                bonus_malus -= 300
             else:  # sc < 0
-                bonus_malus += 2
+                bonus_malus += 300
     return bonus_malus
 
 
 def mobility(board: chess.Board, color):
+    """
+    Function that evaluates the mobility of the players
+    :param board: chess.Board
+    :param color: chess.WHITE || chess.BLACK
+    :return: return the number of moves of the color
+    """
     if color == board.turn:
         return board.legal_moves.count()
     if color != board.turn:

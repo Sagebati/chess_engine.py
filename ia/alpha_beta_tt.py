@@ -87,7 +87,7 @@ def best_play(board: chess.Board, player: bool, depth: int = 5) -> chess.Move:
     :return: the best move
     """
     tt = {}
-    best_moves = collections.deque(2 * [(0, 0)], 2)
+    best_moves = collections.deque([(0, 0)], 2)
     alpha, beta = -math.inf, math.inf
     if player:  # Max Blanc
         best_val = -math.inf

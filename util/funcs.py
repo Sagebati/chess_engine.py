@@ -16,7 +16,8 @@ def creative_move(fifo: collections.deque) -> chess.Move:
     best_eval = fifo[0][1]  # getting the best eval 0 best move 1 eval
 
     # Creating a list with move with epsilon difference with the best move
-    moves = [move_eval for move_eval in fifo if best_eval - epsilon <= move_eval[1]]
+    moves = [move_eval for move_eval in fifo if best_eval - epsilon <= move_eval[1] and move_eval[0] != 0]
+
 
     print(moves)
     return random.choice(moves)[0]
@@ -45,3 +46,20 @@ def total_pieces(board: chess.Board) -> int:
     :return: number of pieces
     """
     return number_pieces(board, chess.WHITE) + number_pieces(board, chess.BLACK)
+
+
+def game_over_reason(board: chess.Board):
+    """
+    Function that will print the result and the reason of the endgame
+    :param board: board to analyse
+    """
+    print("Game over:", end="")
+    if board.is_fivefold_repetition():
+        print("fivefold repetition")
+    if board.is_seventyfive_moves():
+        print("70 moves")
+    if board.is_stalemate():
+        print("Pat")
+    if board.is_checkmate():
+        print("Check mate")
+    print("result: ", board.result())
