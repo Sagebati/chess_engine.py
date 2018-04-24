@@ -2,7 +2,7 @@ import chess
 import chess.polyglot as zb
 
 
-def findBoardorAdd(board: chess.Board, tt: {}, depth, alphabeta, ev=None):
+def findboardorbdd(board: chess.Board, tt: {}, depth, alphabeta, ev=None):
     h = zb.zobrist_hash(board)
     if h in tt.keys():
         return True, tt[h]

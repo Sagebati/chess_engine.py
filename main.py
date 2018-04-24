@@ -23,13 +23,6 @@ print(board)
 count = 1
 profondeur = 2
 
-# print("2 Games modes: 1: ia vs ia ; 2: ia vs You")
-# resp1 = input("Which mode ?")
-# resp2 = input("Which difficulty for ia 1 ?")
-# resp3 = ""
-# if int(resp1) == 1:
-#     resp3 = input("Which difficulty for ia 2 ?")
-
 while not board.is_game_over():
     board.push(ab.best_play(board, board.turn, profondeur))
     print("---------------------------------")

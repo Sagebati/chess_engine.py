@@ -2,9 +2,12 @@
 import sys
 
 import chess
-import uci.eng_gui as eg
+
 import uci.gui_eng as ge
 
+"""
+UCI ENGINE
+"""
 
 def split_comm_args(inp: str):
     strss = inp.split(" ")
