@@ -18,8 +18,6 @@ def creative_move(fifo: collections.deque) -> chess.Move:
     # Creating a list with move with epsilon difference with the best move
     moves = [move_eval for move_eval in fifo if best_eval - epsilon <= move_eval[1] and move_eval[0] != 0]
 
-
-    print(moves)
     return random.choice(moves)[0]
 
 

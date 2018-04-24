@@ -7,7 +7,7 @@ from util.funcs import game_over_reason
 board = chess.Board()
 
 count = 0
-depth = 1
+depth = 4
 
 while not board.is_game_over():
     print("---------------------------------")
@@ -15,8 +15,6 @@ while not board.is_game_over():
     print("---------------------------------")
     print(board)
     move = ab.best_play(board, board.turn, depth)
-    if move == 0:
-        print("bug")
     board.push(move)
     count += 1
 
