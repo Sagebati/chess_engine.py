@@ -4,8 +4,8 @@ import time
 import chess
 
 import eval.evaluation as ev
-import ia.alpha_beta as ab
-import ia.min_max as mm
+import IA.alpha_beta as ab
+import IA.min_max as mm
 
 
 # Fonction permettant l'affichage du motif de fin de partie.
