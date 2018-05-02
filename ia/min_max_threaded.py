@@ -1,10 +1,9 @@
 import math
+import multiprocessing as mp
 
 import chess
-import collections
 
-import IA.evaluation as ev
-from util.funcs import creative_move
+import eval.evaluation as ev
 
 
 def _min(board, profondeur):
@@ -15,7 +14,7 @@ def _min(board, profondeur):
     :type profondeur: int
     """
     if profondeur == 0 or board.is_game_over():
-        return ev.evaluer(board)
+        return ev.evaluate(board)
 
     val = math.inf
     for play in board.legal_moves:
@@ -34,7 +33,7 @@ def _max(board, profondeur):
     :type profondeur: int
     """
     if profondeur == 0 or board.is_game_over():
-        return ev.evaluer(board)
+        return ev.evaluate(board)
 
     val = -math.inf
 
@@ -45,32 +44,29 @@ def _max(board, profondeur):
     return val
 
 
-def best_play(board, player, profondeur=5):
+def best_play(board: chess.Board, player, profondeur=5):
     """
     :param profondeur: profondeur de l'algorithme
     :param board: chess.Board
     :param player: boolean
     :return: chess.Move
     """
-
-    best_moves = collections.deque(2 * [(0, 0)], 2)
-
-    val_min = -math.inf
-    val_max = math.inf
+    results = []
+    id = 0
+    moves = []
+    pool = mp.Pool(processes=16)
     for move in board.legal_moves:
+        moves.append(move)
+        clone = board.copy(stack=False)
+        clone.push(move)
         if player:
-            board.push(move)
-            val = _min(board, profondeur)
-            board.pop()
-            if val >= val_min:
-                val_min = val
-                best_moves.appendleft((move, val))
+            results.append((pool.apply(_min, args=(clone, profondeur)), id))
         else:
-            board.push(move)
-            val = _max(board, profondeur)
-            board.pop()
-            if val <= val_max:
-                val_max = val
-                best_moves.appendleft((move, val))
+            results.append((pool.apply(_max, args=(clone, profondeur)), id))
+        id += 1
+    if player:
+        m = max(results)
+    else:
+        m = min(results)
 
-    return creative_move(best_moves)
+    return moves[m[1]]

@@ -3,25 +3,24 @@ import math
 import chess
 import collections
 
-import IA.evaluation as ev
-
+import eval.evaluation as ev
 from util.funcs import creative_move
 
 
-def ab_max(board: chess.Board, alpha, beta, profondeur):
+def ab_max(board: chess.Board, alpha, beta, depth) -> int:
     """
     :param board: the board of the game
     :param alpha: alpha val
     :param beta: beta val
-    :param profondeur: profondeur
-    :return: the evaluatuin of the branch
+    :param depth: depth
+    :return: the evaluation of the branch
     """
-    if profondeur == 0 or board.is_game_over():
-        return ev.evaluer(board)
+    if depth == 0 or board.is_game_over():
+        return ev.evaluate(board)
     best_eval = -math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        best_eval = max(best_eval, ab_min(board, alpha, beta, profondeur - 1))
+        best_eval = max(best_eval, ab_min(board, alpha, beta, depth - 1))
         board.pop()
         if best_eval >= beta:
             return best_eval
@@ -29,20 +28,20 @@ def ab_max(board: chess.Board, alpha, beta, profondeur):
     return best_eval
 
 
-def ab_min(board: chess.Board, alpha, beta, profondeur: int):
+def ab_min(board: chess.Board, alpha, beta, depth: int) -> int:
     """
     :param board: board of the chess game
     :param alpha: alpha
     :param beta: beta
-    :param profondeur: profondeur
+    :param depth: profondeur
     :return: the branch evaluation
     """
-    if profondeur == 0 or board.is_game_over():
-        return ev.evaluer(board)
+    if depth == 0 or board.is_game_over():
+        return ev.evaluate(board)
     best_eval = math.inf
     for coup in board.legal_moves:
         board.push(coup)
-        best_eval = min(best_eval, ab_max(board, alpha, beta, profondeur - 1))
+        best_eval = min(best_eval, ab_max(board, alpha, beta, depth - 1))
         board.pop()
         if best_eval <= alpha:
             return best_eval
@@ -50,14 +49,14 @@ def ab_min(board: chess.Board, alpha, beta, profondeur: int):
     return best_eval
 
 
-def best_play(board: chess.Board, player: bool, profondeur: int = 5) -> chess.Move:
+def best_play(board: chess.Board, player: bool, depth: int = 5) -> chess.Move:
     best_moves = collections.deque(2 * [(0, 0)], 2)
     alpha, beta = -math.inf, math.inf
     if player:  # Max
         best_eval = -math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            ab = ab_min(board, alpha, beta, profondeur - 1)
+            ab = ab_min(board, alpha, beta, depth - 1)
             board.pop()
             if ab > best_eval:
                 best_eval = ab
@@ -67,7 +66,7 @@ def best_play(board: chess.Board, player: bool, profondeur: int = 5) -> chess.Mo
         best_eval = math.inf
         for coup in board.legal_moves:
             board.push(coup)
-            ab = ab_max(board, alpha, beta, profondeur - 1)
+            ab = ab_max(board, alpha, beta, depth - 1)
             board.pop()
             if ab < best_eval:
                 best_eval = ab

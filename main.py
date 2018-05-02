@@ -1,34 +1,21 @@
 import chess
 
-import IA.alpha_beta_trans as ab
-import IA.evaluation as ev
-
-
-def motif_fin(board: chess.Board):
-    print("motif de fin:", end="")
-    if board.is_fivefold_repetition():
-        print("repitition 5 fois")
-    if board.is_seventyfive_moves():
-        print("Règle des 70 coups")
-    if board.is_stalemate():
-        print("Pat")
-    if board.is_checkmate():
-        print("Echec est mat")
-    print("resultat:", board.result())
-
+import eval.evaluation as ev
+import ia.alpha_beta_tt as ab
+from util.funcs import game_over_reason
 
 board = chess.Board()
-print(board)
 
-count = 1
-profondeur = 4
+count = 0
+depth = 4
 
 while not board.is_game_over():
-    board.push(ab.best_play(board, board.turn, profondeur))
     print("---------------------------------")
-    print("nbrcoups", count, "score:", ev.evaluer(board), "profondeur:", profondeur)
+    print("nbrcoups", count, "score:", ev.evaluate(board), "profondeur:", depth)
     print("---------------------------------")
     print(board)
+    move = ab.best_play(board, board.turn, depth)
+    board.push(move)
     count += 1
 
-motif_fin(board)
+game_over_reason(board)
